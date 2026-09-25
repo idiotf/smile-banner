@@ -1,0 +1,50 @@
+@font-face {
+  font-family: NanumSquareWebFont;
+  font-style: normal;
+  font-weight: normal;
+  src: url(./NanumSquare_acR.eot);
+  src:
+    url(./NanumSquare_acR.eot?#iefix) format('embedded-opentype'),
+    url(./NanumSquare_acR.woff) format('woff'),
+    url(./NanumSquare_acR.ttf) format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: NanumSquareWebFont;
+  font-style: normal;
+  font-weight: 600;
+  src: url(./NanumSquare_acB.eot);
+  src:
+    url(./NanumSquare_acB.eot?#iefix) format('embedded-opentype'),
+    url(./NanumSquare_acB.woff) format('woff'),
+    url(./NanumSquare_acB.ttf) format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: NanumSquareWebFont;
+  font-style: normal;
+  font-weight: bold;
+  src: url(./NanumSquare_acEB.eot);
+  src:
+    url(./NanumSquare_acEB.eot?#iefix) format('embedded-opentype'),
+    url(./NanumSquare_acEB.woff) format('woff')/*,
+    url(./NanumSquare_acEB.ttf) format('truetype')*/;
+  font-display: swap;
+}
+
+.nanum-square-web-font {
+  font-family:
+    NanumSquareWebFont,
+    '나눔고딕',
+    NanumGothic,
+    -apple-system,
+    '맑은 고딕',
+    'Malgun Gothic',
+    '돋움',
+    dotum,
+    Helvetica,
+    arial,
+    sans-serif;
+}

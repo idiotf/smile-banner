@@ -1,21 +1,3 @@
-# Next.js template
+# smile-banner - 스마일 배너 생성기
 
-This is a Next.js template with shadcn/ui.
-
-## Adding components
-
-To add components to your app, run the following command:
-
-```bash
-npx shadcn@latest add button
-```
-
-This will place the ui components in the `components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+엔트리 마이 페이지의 배너 사진 아래에 스마일을 추가해줍니다.
