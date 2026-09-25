@@ -14,21 +14,24 @@ export function IconPreview({ selectedIconHtml, ...props }: IconPreviewProps) {
 
 export interface BannerPreviewProps {
   bgUrl: string | undefined | null
+  backgroundColor: string
   spaceHeight: number
   selectedIconHtml: string
 }
 
 export function BannerPreview({
   bgUrl,
+  backgroundColor,
   spaceHeight,
   selectedIconHtml,
 }: BannerPreviewProps) {
   return (
     <div className='flex flex-col h-52.5 overflow-hidden'>
       <div
-        className='flex-1 bg-[#16d8a3] bg-center bg-size-[1200px]'
+        className='flex-1 bg-center bg-no-repeat bg-size-[1200px]'
         style={{
           backgroundImage: bgUrl ? `url(${bgUrl})` : '',
+          backgroundColor,
         }}
       />
       <div
