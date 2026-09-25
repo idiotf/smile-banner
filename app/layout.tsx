@@ -20,7 +20,8 @@ export const metadata: Metadata = {
     default: '스마일 배너 생성기',
     template: '%s | 스마일 배너 생성기',
   },
-  description: '엔트리 마이 페이지에 쓰기 위한 스마일 배너를 생성하는 기능을 제공합니다.',
+  description:
+    '엔트리 마이 페이지에 쓰기 위한 스마일 배너를 생성하는 기능을 제공합니다.',
 }
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

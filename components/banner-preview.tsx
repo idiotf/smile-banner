@@ -26,9 +26,9 @@ export function BannerPreview({
   selectedIconHtml,
 }: BannerPreviewProps) {
   return (
-    <div className='flex flex-col h-52.5 overflow-hidden'>
+    <div className='flex h-52.5 flex-col overflow-hidden'>
       <div
-        className='flex-1 bg-center bg-no-repeat bg-size-[1200px]'
+        className='flex-1 bg-size-[1200px] bg-center bg-no-repeat'
         style={{
           backgroundImage: bgUrl ? `url(${bgUrl})` : '',
           backgroundColor,
@@ -52,21 +52,21 @@ export type ProfilePreviewProps = BannerPreviewProps
 
 export function ProfilePreview(props: ProfilePreviewProps) {
   return (
-    <div className='overflow-hidden bg-white nanum-square-web-font'>
+    <div className='nanum-square-web-font overflow-hidden bg-white'>
       <BannerPreview {...props} />
-      <div className='relative w-265.5 -mt-14.75 mb-11 mx-auto select-none'>
-        <div className='size-29.5 border-4 border-white rounded-full -ml-1 bg-[#eee]' />
+      <div className='relative mx-auto -mt-14.75 mb-11 w-265.5 select-none'>
+        <div className='-ml-1 size-29.5 rounded-full border-4 border-white bg-[#eee]' />
         <div className='mt-6'>
-          <div className='w-48 h-7 rounded-md bg-[#eee]' />
+          <div className='h-7 w-48 rounded-md bg-[#eee]' />
           <div className='mt-4.5'>
-            <span className='pr-1.5 text-[#555] text-sm leading-4 align-top'>
+            <span className='pr-1.5 align-top text-sm leading-4 text-[#555]'>
               팔로잉{' '}
-              <em className='align-middle inline-block w-8 h-[1em] rounded-md bg-[#eee]' />
+              <em className='inline-block h-[1em] w-8 rounded-md bg-[#eee] align-middle' />
             </span>
-            <span className='relative pl-2 pr-1.5 text-[#555] text-sm leading-4 align-top'>
+            <span className='relative pr-1.5 pl-2 align-top text-sm leading-4 text-[#555]'>
               팔로워{' '}
-              <em className='align-middle inline-block w-8 h-[1em] rounded-md bg-[#eee]' />
-              <span className='absolute left-0 top-1/2 size-0.5 -mt-px rounded-full bg-[#a4a4a4]' />
+              <em className='inline-block h-[1em] w-8 rounded-md bg-[#eee] align-middle' />
+              <span className='absolute top-1/2 left-0 -mt-px size-0.5 rounded-full bg-[#a4a4a4]' />
             </span>
           </div>
         </div>

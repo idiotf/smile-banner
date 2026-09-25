@@ -17,8 +17,10 @@ export default function Page() {
   const [file, setFile] = useState<File>()
   const [backgroundColor, setBackgroundColor] = useState('#16d8a3')
   const [spaceHeight, setSpaceHeight] = useReducer((_, v) => v ?? 0, 32)
-  const [selectedIcon, setSelectedIcon] =
-    useReducer<'basicSmile', ['basicSmile' | null]>((_, v) => v!, 'basicSmile')
+  const [selectedIcon, setSelectedIcon] = useReducer<
+    'basicSmile',
+    ['basicSmile' | null]
+  >((_, v) => v!, 'basicSmile')
 
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [error, setError] = useState('')
@@ -88,9 +90,9 @@ export default function Page() {
   }, [handleFileList])
 
   return (
-    <main className='h-dvh flex flex-col'>
-      <div className='flex-1 flex justify-center items-center'>
-        <div className='border box-content w-7xl shadow-[0_0_48px_-24px] overflow-hidden'>
+    <main className='flex h-dvh flex-col'>
+      <div className='flex flex-1 items-center justify-center'>
+        <div className='box-content w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
           <ProfilePreview
             bgUrl={fileUrl}
             backgroundColor={backgroundColor}
@@ -99,7 +101,7 @@ export default function Page() {
           />
         </div>
       </div>
-      <div className='bg-background border-t p-4 overflow-auto'>
+      <div className='overflow-auto border-t bg-background p-4'>
         <BannerOptions
           backgroundColor={backgroundColor}
           spaceHeight={spaceHeight}

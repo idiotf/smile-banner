@@ -3,7 +3,12 @@ import { DownloadIcon, CircleAlert } from 'lucide-react'
 import { paths, type PathType } from '@/paths'
 import { IconPreview } from './banner-preview'
 import { FileButtonWithLabel } from '@/components/file-select-button'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { NumberInput } from '@/components/number-input'
@@ -20,13 +25,10 @@ import '@/fonts/nanum-square-web-font/index.css'
 const pathItems = Object.entries(paths).map(([k, v]) => ({
   label: v.label,
   value: k,
-})) as { label: string, value: PathType }[]
+})) as { label: string; value: PathType }[]
 
 export type FieldType =
-  | 'image'
-  | 'backgroundColor'
-  | 'spaceHeight'
-  | 'selectedIcon'
+  'image' | 'backgroundColor' | 'spaceHeight' | 'selectedIcon'
 export type FieldErrors = { [K in FieldType]?: string }
 
 export interface BannerOptionsProps {
@@ -62,13 +64,10 @@ export function BannerOptions({
   )
 
   return (
-    <FieldGroup className='max-w-300 mx-auto'>
+    <FieldGroup className='mx-auto max-w-300'>
       <Field data-invalid={!!fieldErrors.image}>
         <FieldLabel>배너 이미지</FieldLabel>
-        <FileButtonWithLabel
-          onFileSelect={onFileSelect}
-          className='w-min!'
-        />
+        <FileButtonWithLabel onFileSelect={onFileSelect} className='w-min!' />
         <FieldError>{fieldErrors.image}</FieldError>
       </Field>
       <Field data-invalid={!!fieldErrors.backgroundColor}>
@@ -105,7 +104,7 @@ export function BannerOptions({
               <IconPreview
                 viewBox='0 0 32 32'
                 selectedIconHtml={paths[selectedIcon].preview}
-                className='*:fill-foreground h-full scale-125'
+                className='h-full scale-125 *:fill-foreground'
               />
               {paths[selectedIcon].label}
             </SelectValue>
@@ -117,7 +116,7 @@ export function BannerOptions({
                   <IconPreview
                     viewBox='0 0 32 32'
                     selectedIconHtml={paths[value].preview}
-                    className='*:fill-foreground h-full size-5 scale-125'
+                    className='size-5 h-full scale-125 *:fill-foreground'
                   />
                   {label}
                 </SelectItem>
@@ -133,7 +132,7 @@ export function BannerOptions({
           다운로드
         </Button>
         {error && (
-          <p className='text-destructive flex items-center gap-1'>
+          <p className='flex items-center gap-1 text-destructive'>
             <CircleAlert className='inline-block size-[1em]' />
             {error}
           </p>
