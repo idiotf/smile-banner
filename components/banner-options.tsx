@@ -31,7 +31,9 @@ export type FieldType =
   'image' | 'backgroundColor' | 'spaceHeight' | 'selectedIcon'
 export type FieldErrors = { [K in FieldType]?: string }
 
-export interface BannerOptionsProps {
+export interface BannerOptionsProps extends React.ComponentProps<
+  typeof FieldGroup
+> {
   backgroundColor: string
   spaceHeight: number
   selectedIcon: PathType
@@ -55,6 +57,7 @@ export function BannerOptions({
   onGenerate,
   fieldErrors = {},
   error,
+  ...props
 }: BannerOptionsProps) {
   const handleColorChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +67,7 @@ export function BannerOptions({
   )
 
   return (
-    <FieldGroup className='mx-auto max-w-300'>
+    <FieldGroup {...props}>
       <Field data-invalid={!!fieldErrors.image}>
         <FieldLabel>배너 이미지</FieldLabel>
         <FileButtonWithLabel onFileSelect={onFileSelect} className='w-min!' />

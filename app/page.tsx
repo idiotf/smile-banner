@@ -90,18 +90,9 @@ export default function Page() {
   }, [handleFileList])
 
   return (
-    <main className='flex h-dvh flex-col'>
-      <div className='flex flex-1 items-center justify-center'>
-        <div className='box-content w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
-          <ProfilePreview
-            bgUrl={fileUrl}
-            backgroundColor={backgroundColor}
-            spaceHeight={spaceHeight}
-            selectedIconHtml={selectedIconPathHtml.content}
-          />
-        </div>
-      </div>
-      <div className='overflow-auto border-t bg-background p-4'>
+    <main className='flex h-dvh'>
+      <div className='w-xs overflow-auto border-r bg-background p-8'>
+        <h1 className='mb-6 text-xl font-semibold'>스마일 배너 생성기</h1>
         <BannerOptions
           backgroundColor={backgroundColor}
           spaceHeight={spaceHeight}
@@ -114,6 +105,16 @@ export default function Page() {
           fieldErrors={fieldErrors}
           error={error}
         />
+      </div>
+      <div className='flex flex-1 items-center justify-center'>
+        <div className='box-content w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
+          <ProfilePreview
+            bgUrl={fileUrl}
+            backgroundColor={backgroundColor}
+            spaceHeight={spaceHeight}
+            selectedIconHtml={selectedIconPathHtml.content}
+          />
+        </div>
       </div>
     </main>
   )
