@@ -29,7 +29,7 @@ export function BannerPreview({
     <div className='@container flex h-52.5 flex-col overflow-hidden'>
       <div className='flex-1' style={{ backgroundColor }}>
         <div
-          className='@max-w-300 m-auto h-full bg-cover bg-center bg-no-repeat'
+          className='max-w-300 m-auto h-full bg-cover bg-center bg-no-repeat'
           style={{
             backgroundImage: bgUrl ? `url(${bgUrl})` : '',
           }}
