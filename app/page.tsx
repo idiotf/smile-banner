@@ -41,7 +41,12 @@ export default function Page() {
     setFieldErrors({})
 
     if (!file) {
-      setFieldErrors({ image: '배너 이미지를 선택해 주세요.' })
+      const generatedSvg = generateBannerSvg({
+        backgroundColor,
+        spaceHeight,
+        selectedIconHtml: paths[selectedIcon].content,
+      })
+      downloadBlob(new Blob([generatedSvg]), 'smile-banner.svg')
       return
     }
 
