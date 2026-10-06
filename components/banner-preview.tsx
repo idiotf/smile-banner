@@ -27,9 +27,9 @@ export function BannerPreview({
 }: BannerPreviewProps) {
   return (
     <div className='@container flex h-52.5 flex-col overflow-hidden'>
-      <div className='flex-1 flex justify-center' style={{ backgroundColor }}>
+      <div className='flex flex-1 justify-center' style={{ backgroundColor }}>
         <div
-          className='w-300 shrink-0 h-full bg-cover bg-center bg-no-repeat'
+          className='h-full w-300 shrink-0 bg-cover bg-center bg-no-repeat'
           style={{
             backgroundImage: bgUrl ? `url(${bgUrl})` : '',
           }}
