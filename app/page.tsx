@@ -2,16 +2,13 @@
 
 import { useCallback, useEffect, useState, useReducer } from 'react'
 import { generateBannerSvg } from '@/generator/banner'
+import { generateImageSvg } from '@/generator/image-svg'
 import { downloadBlob } from '@/utils/common/download'
 import { useBlobUrl } from '@/hooks/use-blob-url'
 import { paths, type PathType } from '@/paths'
 import { ProfilePreview } from '@/components/banner-preview'
 import { BannerOptions, type FieldErrors } from '@/components/banner-options'
 import { preventDefault } from '@/utils/common/prevent-default'
-
-function generateImageSvg(blobUrl: string, width: number, height: number) {
-  return `<image href="${blobUrl}" width="${width}" height="${height}"/>`
-}
 
 export default function Page() {
   const [file, setFile] = useState<File>()
