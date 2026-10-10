@@ -93,11 +93,11 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
       <SelectContent>
         <SelectGroup>
           <SelectItem value='none'>
-            <div className='inline-block size-8' />
+            <div className='inline-block size-5' />
             스마일 없음
           </SelectItem>
           {pathItems.map(({ label, value }) => (
-            <SelectItem key={value} value={value}>
+            <SelectItem key={value} value={`icon-${value}`}>
               <IconPreview
                 viewBox='0 0 32 32'
                     selectedIconHtml={paths[value].preview}
@@ -106,8 +106,8 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
               {label}
             </SelectItem>
           ))}
-          <SelectItem value='none'>
-            <FileIcon className='size-8' />
+          <SelectItem value='custom'>
+            <FileIcon className='size-5' />
             사용자 지정
           </SelectItem>
         </SelectGroup>
