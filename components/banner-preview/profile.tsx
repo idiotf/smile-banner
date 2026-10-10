@@ -1,3 +1,4 @@
+import { BannerPreview, type BannerPreviewProps } from './banner'
 import '@/fonts/nanum-square-web-font/index.css'
 
 export type ProfilePreviewProps = BannerPreviewProps
