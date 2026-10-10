@@ -16,7 +16,7 @@ export function generateBannerSvg(options: BannerGeneratingOptions) {
       `#t>rect{width:92520px;height:${options.spaceHeight + 4}px;fill:#fff}` +
       (options.imageUrl === undefined
         ? ''
-        : `image{${
+        : `#a{${
             `transform:translate(calc(50% - 600px));` +
             `height:calc(100% - ${options.spaceHeight}px)`
           }}`)
@@ -30,6 +30,7 @@ export function generateBannerSvg(options: BannerGeneratingOptions) {
     (options.imageUrl === undefined
       ? ''
       : `<image ${
+          `id="a" ` +
           `href="${options.imageUrl}" ` +
           `width="1200" ` +
           `height="${210 - options.spaceHeight}" ` +
