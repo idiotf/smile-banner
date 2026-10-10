@@ -20,12 +20,73 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+// 이거 왜 여기 있지??? vvv
 import '@/fonts/nanum-square-web-font/index.css'
 
 const pathItems = Object.entries(paths).map(([k, v]) => ({
   label: v.label,
   value: k,
 })) as { label: string; value: PathType }[]
+
+interface IconSelectProps {
+  selectedIcon: PathType | File | null
+  onIconSelect: (value: PathType | File | null) => void
+}
+
+function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
+  const selectedValue = selectedIcon === null
+    ? 'none'
+    : selectedIcon instanceof File
+      ? 'custom'
+      : `icon-${selectedIcon}`
+
+  const onValueChange = useCallback(
+    (value: string) => {
+      if (value === 'custom') {
+        // TODO: file select
+        return
+      }
+
+      onIconSelect(
+        value === 'none' ? null : value.replace('icon-', '') as PathType,
+      )
+    },
+    [onIconSelect],
+  )
+
+  return (
+    <Select
+      items={pathItems}
+      value={selectedValue}
+      onValueChange={onValueChange}
+    >
+      <SelectTrigger className='w-56!'>
+        <SelectValue>
+          <IconPreview
+            viewBox='0 0 32 32'
+                selectedIconHtml={paths[selectedIcon].preview}
+            className='h-full scale-125 *:fill-foreground'
+          />
+          {paths[selectedIcon].label}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          {pathItems.map(({ label, value }) => (
+            <SelectItem key={value} value={value}>
+              <IconPreview
+                viewBox='0 0 32 32'
+                    selectedIconHtml={paths[value].preview}
+                className='size-5 h-full scale-125 *:fill-foreground'
+              />
+              {label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  )
+}
 
 export type FieldType =
   'image' | 'backgroundColor' | 'spaceHeight' | 'selectedIcon'
@@ -36,10 +97,10 @@ export interface BannerOptionsProps extends React.ComponentProps<
 > {
   backgroundColor: string
   spaceHeight: number
-  selectedIcon: PathType
+  selectedIcon: PathType | File | null
   onBackgroundColorChange: (value: string) => void
   onSpaceHeightChange: (value: number | undefined) => void
-  onIconSelect: (value: PathType | null) => void
+  onIconSelect: (value: PathType | File | null) => void
   onFileSelect: (fileList: FileList) => void
   onGenerate: () => void
   fieldErrors?: FieldErrors
@@ -97,36 +158,7 @@ export function BannerOptions({
       </Field>
       <Field data-invalid={!!fieldErrors.selectedIcon}>
         <FieldLabel>스마일 모양</FieldLabel>
-        <Select
-          items={pathItems}
-          value={selectedIcon}
-          onValueChange={onIconSelect}
-        >
-          <SelectTrigger className='w-56!'>
-            <SelectValue>
-              <IconPreview
-                viewBox='0 0 32 32'
-                selectedIconHtml={paths[selectedIcon].preview}
-                className='h-full scale-125 *:fill-foreground'
-              />
-              {paths[selectedIcon].label}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {pathItems.map(({ label, value }) => (
-                <SelectItem key={value} value={value}>
-                  <IconPreview
-                    viewBox='0 0 32 32'
-                    selectedIconHtml={paths[value].preview}
-                    className='size-5 h-full scale-125 *:fill-foreground'
-                  />
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <IconSelect />
         <FieldError>{fieldErrors.selectedIcon}</FieldError>
       </Field>
       <div className='flex items-stretch gap-2'>
