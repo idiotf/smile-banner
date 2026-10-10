@@ -11,7 +11,7 @@ import { BannerOptions, type FieldErrors } from '@/components/banner-options'
 import { preventDefault } from '@/utils/common/prevent-default'
 
 function readBlobAsDataUrl(blob: Blob, signal?: AbortSignal) {
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     if (signal?.aborted) {
       throw signal.reason
     }
@@ -44,47 +44,21 @@ function readBlobAsDataUrl(blob: Blob, signal?: AbortSignal) {
   })
 }
 
-function useDataUrl(blob: Blob | null | undefined) {
-  const [url, setUrl] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!blob) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUrl(null)
-      return
-    }
-
-    const controller = new AbortController()
-    const signal = controller.signal
-
-    readBlobAsDataUrl(blob, signal).then(setUrl)
-
-    return () => {
-      controller.abort()
-    }
-  }, [blob])
-
-  return url
-}
-
 export default function Page() {
   const [file, setFile] = useState<File>()
   const [backgroundColor, setBackgroundColor] = useState('#16d8a3')
   const [spaceHeight, setSpaceHeight] = useReducer((_, v) => v ?? 0, 32)
   const [selectedIcon, setSelectedIcon] = useState<PathType | File | null>('basicSmile')
-  const imageUrl = useDataUrl(file)
-  const selectedIconDataUrl = useDataUrl(
-    selectedIcon instanceof File ? selectedIcon : null,
-  )
 
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [error, setError] = useState('')
 
   const fileUrl = useBlobUrl(file)
+  const iconFileUrl = useBlobUrl(selectedIcon instanceof File ? selectedIcon : null)
   const selectedIconHtml = selectedIcon === null
     ? ''
     : selectedIcon instanceof File
-      ? generateImageSvg(selectedIconDataUrl ?? '', spaceHeight, spaceHeight)
+      ? generateImageSvg(iconFileUrl!, spaceHeight, spaceHeight)
       : paths[selectedIcon].content
 
   const handleFileList = useCallback((fileList: ArrayLike<File>) => {
@@ -95,11 +69,22 @@ export default function Page() {
     setFile(file)
   }, [])
 
-  const downloadIcon = useCallback(() => {
+  const downloadIcon = useCallback(async () => {
     setError('')
     setFieldErrors({})
 
     try {
+      const imageUrl = file && await readBlobAsDataUrl(file)
+      const selectedIconHtml = selectedIcon === null
+        ? ''
+        : selectedIcon instanceof File
+          ? generateImageSvg(
+              await readBlobAsDataUrl(selectedIcon),
+              spaceHeight,
+              spaceHeight,
+            )
+          : paths[selectedIcon].content
+
       const generatedSvg = generateBannerSvg({
         imageUrl,
         backgroundColor,
@@ -111,7 +96,7 @@ export default function Page() {
       console.error(e)
       setError('배너 이미지를 불러오는 중 오류가 발생했습니다.')
     }
-  }, [imageUrl, backgroundColor, spaceHeight, selectedIconHtml])
+  }, [file, backgroundColor, spaceHeight, selectedIcon])
 
   useEffect(() => {
     function onDrop(event: DragEvent) {
