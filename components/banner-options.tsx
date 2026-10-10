@@ -1,4 +1,6 @@
 import { useCallback, type ChangeEvent } from 'react'
+import { FileIcon } from 'lucide-react'
+import { useBlobUrl } from '@/hooks/use-blob-url'
 import { DownloadIcon, CircleAlert } from 'lucide-react'
 import { paths, type PathType } from '@/paths'
 import { IconPreview } from './banner-preview'
@@ -40,7 +42,7 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
       : `icon-${selectedIcon}`
 
   const onValueChange = useCallback(
-    async (value: string) => {
+    async (value: string | null) => {
       if (value === 'custom') {
         const fileList = await selectFile({
           accept: ['image/*'],
@@ -53,11 +55,24 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
       }
 
       onIconSelect(
-        value === 'none' ? null : value.replace('icon-', '') as PathType,
+        value === 'none' || value === null
+          ? null
+          : value.replace('icon-', '') as PathType,
       )
     },
     [onIconSelect],
   )
+
+  const iconFileUrl = useBlobUrl(selectedIcon instanceof File ? selectedIcon : null)
+
+  const selectedIconInfo = selectedIcon === null
+    ? null
+    : selectedIcon instanceof File
+      ? {
+        preview: generateImageSvg(iconFileUrl!, 32, 32),
+        label: selectedIcon.name,
+      }
+      : paths[selectedIcon]
 
   return (
     <Select
@@ -69,14 +84,18 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
         <SelectValue>
           <IconPreview
             viewBox='0 0 32 32'
-                selectedIconHtml={paths[selectedIcon].preview}
+                selectedIconHtml={selectedIconInfo?.preview ?? ''}
             className='h-full scale-125 *:fill-foreground'
           />
-          {paths[selectedIcon].label}
+          {selectedIconInfo?.label ?? '스마일 없음'}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
+          <SelectItem value='none'>
+            <div className='inline-block size-8' />
+            스마일 없음
+          </SelectItem>
           {pathItems.map(({ label, value }) => (
             <SelectItem key={value} value={value}>
               <IconPreview
@@ -87,6 +106,10 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
               {label}
             </SelectItem>
           ))}
+          <SelectItem value='none'>
+            <FileIcon className='size-8' />
+            사용자 지정
+          </SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
@@ -167,7 +190,10 @@ export function BannerOptions({
       </Field>
       <Field data-invalid={!!fieldErrors.selectedIcon}>
         <FieldLabel>스마일 모양</FieldLabel>
-        <IconSelect />
+        <IconSelect
+          selectedIcon={selectedIcon}
+          onIconSelect={onIconSelect}
+        />
         <FieldError>{fieldErrors.selectedIcon}</FieldError>
       </Field>
       <div className='flex items-stretch gap-2'>
