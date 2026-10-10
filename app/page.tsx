@@ -7,11 +7,7 @@ import { useBlobUrl } from '@/hooks/use-blob-url'
 import { paths, type PathType } from '@/paths'
 import { ProfilePreview } from '@/components/banner-preview'
 import { BannerOptions, type FieldErrors } from '@/components/banner-options'
-import '@/fonts/nanum-square-web-font/index.css'
-
-function preventDefault(e: { preventDefault(): void }) {
-  e.preventDefault()
-}
+import { preventDefault } from '@/utils/common/prevent-default'
 
 function generateImageSvg(blobUrl: string, width: number, height: number) {
   return `<image href="${blobUrl}" width="${width}" height="${height}"/>`
