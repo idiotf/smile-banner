@@ -1,16 +1,4 @@
-export interface IconPreviewProps extends React.ComponentProps<'svg'> {
-  selectedIconHtml: string
-}
-
-export function IconPreview({ selectedIconHtml, ...props }: IconPreviewProps) {
-  return (
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      dangerouslySetInnerHTML={{ __html: selectedIconHtml }}
-      {...props}
-    />
-  )
-}
+import '@/fonts/nanum-square-web-font/index.css'
 
 export interface BannerPreviewProps {
   bgUrl: string | undefined | null
