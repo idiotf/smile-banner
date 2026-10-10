@@ -1,7 +1,6 @@
 import { useCallback, type ChangeEvent } from 'react'
-import { FileIcon } from 'lucide-react'
+import { FileIcon, DownloadIcon, CircleAlert } from 'lucide-react'
 import { useBlobUrl } from '@/hooks/use-blob-url'
-import { DownloadIcon, CircleAlert } from 'lucide-react'
 import { paths, type PathType } from '@/paths'
 import { IconPreview } from './banner-preview'
 import { FileButtonWithLabel } from '@/components/file-select-button'
@@ -22,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { generateImageSvg } from '@/generator/image-svg'
 import { selectFile } from '@/utils/common/select-file'
 
 const pathItems = Object.entries(paths).map(([k, v]) => ({
