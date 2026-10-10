@@ -13,8 +13,8 @@ function preventDefault(e: { preventDefault(): void }) {
   e.preventDefault()
 }
 
-function generateImageSvg(url: string) {
-  return '' // TODO
+function generateImageSvg(blobUrl: string, width: number, height: number) {
+  return `<image href="${blobUrl}" width="${width}" height="${height}"/>`
 }
 
 export default function Page() {
@@ -31,7 +31,7 @@ export default function Page() {
   const selectedIconHtml = selectedIcon === null
     ? ''
     : selectedIcon instanceof File
-      ? generateImageSvg(iconFileUrl!)
+      ? generateImageSvg(iconFileUrl!, spaceHeight, spaceHeight)
       : paths[selectedIcon].content
 
   const handleFileList = useCallback((fileList: ArrayLike<File>) => {
