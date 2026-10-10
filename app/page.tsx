@@ -1,10 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useReducer, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { generateBannerSvg } from '@/generator/banner'
 import { downloadBlob } from '@/utils/common/download'
 import { useBlobUrl } from '@/hooks/use-blob-url'
-import { paths } from '@/paths'
+import { paths, type PathType } from '@/paths'
 import { ProfilePreview } from '@/components/banner-preview'
 import { BannerOptions, type FieldErrors } from '@/components/banner-options'
 import '@/fonts/nanum-square-web-font/index.css'
@@ -13,20 +13,26 @@ function preventDefault(e: { preventDefault(): void }) {
   e.preventDefault()
 }
 
+function generateImageSvg(url: string) {
+  return '' // TODO
+}
+
 export default function Page() {
   const [file, setFile] = useState<File>()
   const [backgroundColor, setBackgroundColor] = useState('#16d8a3')
   const [spaceHeight, setSpaceHeight] = useReducer((_, v) => v ?? 0, 32)
-  const [selectedIcon, setSelectedIcon] = useReducer<
-    'basicSmile',
-    ['basicSmile' | null]
-  >((_, v) => v!, 'basicSmile')
+  const [selectedIcon, setSelectedIcon] = useState<PathType | File | null>('basicSmile')
 
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [error, setError] = useState('')
 
   const fileUrl = useBlobUrl(file)
-  const selectedIconPathHtml = paths[selectedIcon]
+  const iconFileUrl = useBlobUrl(selectedIcon instanceof File ? selectedIcon : null)
+  const selectedIconHtml = selectedIcon === null
+    ? ''
+    : selectedIcon instanceof File
+      ? generateImageSvg(iconFileUrl!)
+      : paths[selectedIcon].content
 
   const handleFileList = useCallback((fileList: ArrayLike<File>) => {
     const files = Array.from(fileList)
@@ -44,7 +50,7 @@ export default function Page() {
       const generatedSvg = generateBannerSvg({
         backgroundColor,
         spaceHeight,
-        selectedIconHtml: paths[selectedIcon].content,
+        selectedIconHtml,
       })
       downloadBlob(new Blob([generatedSvg]), 'smile-banner.svg')
       return
@@ -68,7 +74,7 @@ export default function Page() {
         imageUrl,
         backgroundColor,
         spaceHeight,
-        selectedIconHtml: paths[selectedIcon].content,
+        selectedIconHtml,
       })
       downloadBlob(new Blob([generatedSvg]), 'smile-banner.svg')
     }
@@ -77,7 +83,7 @@ export default function Page() {
       cleanupListeners()
       setError('배너 이미지를 불러오는 중 오류가 발생했습니다.')
     }
-  }, [file, backgroundColor, spaceHeight, selectedIcon])
+  }, [file, backgroundColor, spaceHeight, selectedIconPathHtml])
 
   useEffect(() => {
     function onDrop(event: DragEvent) {
@@ -117,7 +123,7 @@ export default function Page() {
             bgUrl={fileUrl}
             backgroundColor={backgroundColor}
             spaceHeight={spaceHeight}
-            selectedIconHtml={selectedIconPathHtml.content}
+            selectedIconHtml={selectedIconHtml}
           />
         </div>
       </div>
