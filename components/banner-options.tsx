@@ -42,7 +42,9 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
   const onValueChange = useCallback(
     async (value: string) => {
       if (value === 'custom') {
-        const fileList = await selectFile()
+        const fileList = await selectFile({
+          accept: ['image/*'],
+        })
         const file = fileList[0]
         if (!file) return
 
@@ -134,7 +136,11 @@ export function BannerOptions({
     <FieldGroup {...props}>
       <Field data-invalid={!!fieldErrors.image}>
         <FieldLabel>배너 이미지</FieldLabel>
-        <FileButtonWithLabel onFileSelect={onFileSelect} className='w-min!' />
+        <FileButtonWithLabel
+          accept={['image/*']}
+          onFileSelect={onFileSelect}
+          className='w-min!'
+        />
         <FieldError>{fieldErrors.image}</FieldError>
       </Field>
       <Field data-invalid={!!fieldErrors.backgroundColor}>
