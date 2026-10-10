@@ -79,7 +79,7 @@ export default function Page() {
       cleanupListeners()
       setError('배너 이미지를 불러오는 중 오류가 발생했습니다.')
     }
-  }, [file, backgroundColor, spaceHeight, selectedIconPathHtml])
+  }, [file, backgroundColor, spaceHeight, selectedIconHtml])
 
   useEffect(() => {
     function onDrop(event: DragEvent) {
