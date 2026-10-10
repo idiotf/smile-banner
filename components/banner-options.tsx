@@ -1,5 +1,6 @@
 import { useCallback, type ChangeEvent } from 'react'
-import { DownloadIcon, CircleAlert } from 'lucide-react'
+import { FileIcon, DownloadIcon, CircleAlert } from 'lucide-react'
+import { useBlobUrl } from '@/hooks/use-blob-url'
 import { paths, type PathType } from '@/paths'
 import { IconPreview } from './banner-preview'
 import { FileButtonWithLabel } from '@/components/file-select-button'
@@ -20,12 +21,100 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import '@/fonts/nanum-square-web-font/index.css'
+import { generateImageSvg } from '@/generator/image-svg'
+import { selectFile } from '@/utils/common/select-file'
 
 const pathItems = Object.entries(paths).map(([k, v]) => ({
   label: v.label,
   value: k,
 })) as { label: string; value: PathType }[]
+
+interface IconSelectProps {
+  selectedIcon: PathType | File | null
+  onIconSelect: (value: PathType | File | null) => void
+}
+
+function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
+  const selectedValue = selectedIcon === null
+    ? 'none'
+    : selectedIcon instanceof File
+      ? 'custom'
+      : `icon-${selectedIcon}`
+
+  const onValueChange = useCallback(
+    async (value: string | null) => {
+      if (value === 'custom') {
+        const fileList = await selectFile({
+          accept: ['image/*'],
+        })
+        const file = fileList[0]
+        if (!file) return
+
+        onIconSelect(file)
+        return
+      }
+
+      onIconSelect(
+        value === 'none' || value === null
+          ? null
+          : value.replace('icon-', '') as PathType,
+      )
+    },
+    [onIconSelect],
+  )
+
+  const iconFileUrl = useBlobUrl(selectedIcon instanceof File ? selectedIcon : null)
+
+  const selectedIconInfo = selectedIcon === null
+    ? null
+    : selectedIcon instanceof File
+      ? {
+        preview: generateImageSvg(iconFileUrl!, 32, 32),
+        label: selectedIcon.name,
+      }
+      : paths[selectedIcon]
+
+  return (
+    <Select
+      items={pathItems}
+      value={selectedValue}
+      onValueChange={onValueChange}
+    >
+      <SelectTrigger className='w-56!'>
+        <SelectValue>
+          <IconPreview
+            viewBox='0 0 32 32'
+                selectedIconHtml={selectedIconInfo?.preview ?? ''}
+            className='h-full scale-125 *:fill-foreground'
+          />
+          {selectedIconInfo?.label ?? '스마일 없음'}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem value='none'>
+            <div className='inline-block size-5' />
+            스마일 없음
+          </SelectItem>
+          {pathItems.map(({ label, value }) => (
+            <SelectItem key={value} value={`icon-${value}`}>
+              <IconPreview
+                viewBox='0 0 32 32'
+                    selectedIconHtml={paths[value].preview}
+                className='size-5 h-full scale-125 *:fill-foreground'
+              />
+              {label}
+            </SelectItem>
+          ))}
+          <SelectItem value='custom'>
+            <FileIcon className='size-5' />
+            사용자 지정
+          </SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  )
+}
 
 export type FieldType =
   'image' | 'backgroundColor' | 'spaceHeight' | 'selectedIcon'
@@ -36,10 +125,10 @@ export interface BannerOptionsProps extends React.ComponentProps<
 > {
   backgroundColor: string
   spaceHeight: number
-  selectedIcon: PathType
+  selectedIcon: PathType | File | null
   onBackgroundColorChange: (value: string) => void
   onSpaceHeightChange: (value: number | undefined) => void
-  onIconSelect: (value: PathType | null) => void
+  onIconSelect: (value: PathType | File | null) => void
   onFileSelect: (fileList: FileList) => void
   onGenerate: () => void
   fieldErrors?: FieldErrors
@@ -70,7 +159,11 @@ export function BannerOptions({
     <FieldGroup {...props}>
       <Field data-invalid={!!fieldErrors.image}>
         <FieldLabel>배너 이미지</FieldLabel>
-        <FileButtonWithLabel onFileSelect={onFileSelect} className='w-min!' />
+        <FileButtonWithLabel
+          accept={['image/*']}
+          onFileSelect={onFileSelect}
+          className='w-min!'
+        />
         <FieldError>{fieldErrors.image}</FieldError>
       </Field>
       <Field data-invalid={!!fieldErrors.backgroundColor}>
@@ -97,36 +190,10 @@ export function BannerOptions({
       </Field>
       <Field data-invalid={!!fieldErrors.selectedIcon}>
         <FieldLabel>스마일 모양</FieldLabel>
-        <Select
-          items={pathItems}
-          value={selectedIcon}
-          onValueChange={onIconSelect}
-        >
-          <SelectTrigger className='w-56!'>
-            <SelectValue>
-              <IconPreview
-                viewBox='0 0 32 32'
-                selectedIconHtml={paths[selectedIcon].preview}
-                className='h-full scale-125 *:fill-foreground'
-              />
-              {paths[selectedIcon].label}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {pathItems.map(({ label, value }) => (
-                <SelectItem key={value} value={value}>
-                  <IconPreview
-                    viewBox='0 0 32 32'
-                    selectedIconHtml={paths[value].preview}
-                    className='size-5 h-full scale-125 *:fill-foreground'
-                  />
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <IconSelect
+          selectedIcon={selectedIcon}
+          onIconSelect={onIconSelect}
+        />
         <FieldError>{fieldErrors.selectedIcon}</FieldError>
       </Field>
       <div className='flex items-stretch gap-2'>

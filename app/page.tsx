@@ -1,32 +1,65 @@
 'use client'
 
-import { useCallback, useEffect, useReducer, useState } from 'react'
+import { useCallback, useEffect, useState, useReducer } from 'react'
 import { generateBannerSvg } from '@/generator/banner'
+import { generateImageSvg } from '@/generator/image-svg'
 import { downloadBlob } from '@/utils/common/download'
 import { useBlobUrl } from '@/hooks/use-blob-url'
-import { paths } from '@/paths'
+import { paths, type PathType } from '@/paths'
 import { ProfilePreview } from '@/components/banner-preview'
 import { BannerOptions, type FieldErrors } from '@/components/banner-options'
-import '@/fonts/nanum-square-web-font/index.css'
+import { preventDefault } from '@/utils/common/prevent-default'
 
-function preventDefault(e: { preventDefault(): void }) {
-  e.preventDefault()
+function readBlobAsDataUrl(blob: Blob, signal?: AbortSignal) {
+  return new Promise<string>((resolve, reject) => {
+    if (signal?.aborted) {
+      throw signal.reason
+    }
+
+    function onAbort() {
+      reject(signal!.reason)
+    }
+    signal?.addEventListener('abort', onAbort)
+
+    const reader = new FileReader()
+    reader.addEventListener('load', onLoad, { signal })
+    reader.addEventListener('error', onError, { signal })
+    reader.readAsDataURL(blob)
+
+    function cleanupListeners() {
+      signal?.removeEventListener('abort', onAbort)
+      reader.removeEventListener('load', onLoad)
+      reader.removeEventListener('error', onError)
+    }
+
+    function onLoad() {
+      cleanupListeners()
+      resolve(reader.result as string)
+    }
+
+    function onError(event: Event) {
+      cleanupListeners()
+      reject(event)
+    }
+  })
 }
 
 export default function Page() {
   const [file, setFile] = useState<File>()
   const [backgroundColor, setBackgroundColor] = useState('#16d8a3')
   const [spaceHeight, setSpaceHeight] = useReducer((_, v) => v ?? 0, 32)
-  const [selectedIcon, setSelectedIcon] = useReducer<
-    'basicSmile',
-    ['basicSmile' | null]
-  >((_, v) => v!, 'basicSmile')
+  const [selectedIcon, setSelectedIcon] = useState<PathType | File | null>('basicSmile')
 
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [error, setError] = useState('')
 
   const fileUrl = useBlobUrl(file)
-  const selectedIconPathHtml = paths[selectedIcon]
+  const iconFileUrl = useBlobUrl(selectedIcon instanceof File ? selectedIcon : null)
+  const selectedIconHtml = selectedIcon === null
+    ? ''
+    : selectedIcon instanceof File
+      ? generateImageSvg(iconFileUrl!, spaceHeight, spaceHeight)
+      : paths[selectedIcon].content
 
   const handleFileList = useCallback((fileList: ArrayLike<File>) => {
     const files = Array.from(fileList)
@@ -36,45 +69,31 @@ export default function Page() {
     setFile(file)
   }, [])
 
-  const downloadIcon = useCallback(() => {
+  const downloadIcon = useCallback(async () => {
     setError('')
     setFieldErrors({})
 
-    if (!file) {
-      const generatedSvg = generateBannerSvg({
-        backgroundColor,
-        spaceHeight,
-        selectedIconHtml: paths[selectedIcon].content,
-      })
-      downloadBlob(new Blob([generatedSvg]), 'smile-banner.svg')
-      return
-    }
+    try {
+      const imageUrl = file && await readBlobAsDataUrl(file)
+      const selectedIconHtml = selectedIcon === null
+        ? ''
+        : selectedIcon instanceof File
+          ? generateImageSvg(
+              await readBlobAsDataUrl(selectedIcon),
+              spaceHeight,
+              spaceHeight,
+            )
+          : paths[selectedIcon].content
 
-    const reader = new FileReader()
-    reader.addEventListener('load', onLoad)
-    reader.addEventListener('error', onError)
-    reader.readAsDataURL(file)
-
-    function cleanupListeners() {
-      reader.removeEventListener('load', onLoad)
-      reader.removeEventListener('error', onError)
-    }
-
-    function onLoad() {
-      cleanupListeners()
-
-      const imageUrl = reader.result as string
       const generatedSvg = generateBannerSvg({
         imageUrl,
         backgroundColor,
         spaceHeight,
-        selectedIconHtml: paths[selectedIcon].content,
+        selectedIconHtml,
       })
       downloadBlob(new Blob([generatedSvg]), 'smile-banner.svg')
-    }
-
-    function onError() {
-      cleanupListeners()
+    } catch (e) {
+      console.error(e)
       setError('배너 이미지를 불러오는 중 오류가 발생했습니다.')
     }
   }, [file, backgroundColor, spaceHeight, selectedIcon])
@@ -117,7 +136,7 @@ export default function Page() {
             bgUrl={fileUrl}
             backgroundColor={backgroundColor}
             spaceHeight={spaceHeight}
-            selectedIconHtml={selectedIconPathHtml.content}
+            selectedIconHtml={selectedIconHtml}
           />
         </div>
       </div>
