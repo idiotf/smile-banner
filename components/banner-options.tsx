@@ -20,8 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-// 이거 왜 여기 있지??? vvv
-import '@/fonts/nanum-square-web-font/index.css'
+import { selectFile } from '@/utils/common/select-file'
 
 const pathItems = Object.entries(paths).map(([k, v]) => ({
   label: v.label,
@@ -41,9 +40,13 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
       : `icon-${selectedIcon}`
 
   const onValueChange = useCallback(
-    (value: string) => {
+    async (value: string) => {
       if (value === 'custom') {
-        // TODO: file select
+        const fileList = await selectFile()
+        const file = fileList[0]
+        if (!file) return
+
+        onIconSelect(file)
         return
       }
 
