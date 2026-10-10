@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useReducer } from 'react'
 import { generateBannerSvg } from '@/generator/banner'
 import { downloadBlob } from '@/utils/common/download'
 import { useBlobUrl } from '@/hooks/use-blob-url'
