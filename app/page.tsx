@@ -120,7 +120,7 @@ export default function Page() {
     <main className='flex h-dvh overflow-hidden'>
       <div
         data-hidden={!panelOpen}
-        className='relative transition w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto border-r bg-background p-8'
+        className='relative transition-[width] w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto border-r bg-background p-8'
       >
         <Button
           variant='ghost'
