@@ -122,7 +122,7 @@ export default function Page() {
     <main className='relative flex h-dvh overflow-hidden'>
       <div
         data-hidden={!panelOpen}
-        className='relative z-10 transition-[width] duration-250 w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
+        className='relative z-10 transition-[width] duration-200 ease-out w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
       >
         <div className='relative w-79.75 p-8'>
           <h1 className='mb-6 text-xl font-semibold'>스마일 배너 생성기</h1>
