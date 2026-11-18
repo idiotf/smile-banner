@@ -64,6 +64,8 @@ export default function Page() {
       ? generateImageSvg(iconFileUrl!, spaceHeight, spaceHeight)
       : paths[selectedIcon].content
 
+  const togglePanel = useCallback(() => setPanelOpen((panelOpen) => !panelOpen), [])
+
   const handleFileList = useCallback((fileList: ArrayLike<File>) => {
     const files = Array.from(fileList)
     const file = files.find((v) => v.type.startsWith('image/')) ?? files[0]
@@ -123,14 +125,6 @@ export default function Page() {
         className='relative z-10 transition-[width] duration-300 w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
       >
         <div className='relative w-79.75 p-8'>
-          <Button
-            variant='ghost'
-            size='icon'
-            onClick={() => setPanelOpen(false)}
-            className='absolute right-2 top-2'
-          >
-            <PanelLeftClose />
-          </Button>
           <h1 className='mb-6 text-xl font-semibold'>스마일 배너 생성기</h1>
           <BannerOptions
             backgroundColor={backgroundColor}
@@ -146,13 +140,13 @@ export default function Page() {
           />
         </div>
       </div>
-      <div className='flex flex-1 h-full items-center justify-center overflow-hidden'>
+      <div className='relative flex flex-1 h-full items-center justify-center overflow-hidden'>
         <Button
           variant='ghost'
           size='icon'
           data-hidden={panelOpen}
-          onClick={() => setPanelOpen(true)}
-          className='absolute left-2 top-2 transition-[display] delay-350 data-[hidden=true]:hidden'
+          onClick={togglePanel}
+          className='absolute left-2 top-2'
         >
           <PanelLeftOpen />
         </Button>
