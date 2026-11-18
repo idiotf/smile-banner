@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState, useReducer } from 'react'
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { PanelLeft } from 'lucide-react'
 import { generateBannerSvg } from '@/generator/banner'
 import { generateImageSvg } from '@/generator/image-svg'
 import { downloadBlob } from '@/utils/common/download'
@@ -122,7 +122,7 @@ export default function Page() {
     <main className='relative flex h-dvh overflow-hidden'>
       <div
         data-hidden={!panelOpen}
-        className='relative z-10 transition-[width] duration-300 w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
+        className='relative z-10 transition-[width] duration-250 w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
       >
         <div className='relative w-79.75 p-8'>
           <h1 className='mb-6 text-xl font-semibold'>스마일 배너 생성기</h1>
@@ -148,7 +148,7 @@ export default function Page() {
           onClick={togglePanel}
           className='absolute left-2 top-2'
         >
-          <PanelLeftOpen />
+          <PanelLeft />
         </Button>
         <div className='box-content w-full *:min-w-xl max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
           <ProfilePreview
