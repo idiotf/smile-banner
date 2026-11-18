@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState, useReducer } from 'react'
+import { PanelLeft } from 'lucide-react'
 import { generateBannerSvg } from '@/generator/banner'
 import { generateImageSvg } from '@/generator/image-svg'
 import { downloadBlob } from '@/utils/common/download'
@@ -8,6 +9,7 @@ import { useBlobUrl } from '@/hooks/use-blob-url'
 import { paths, type PathType } from '@/paths'
 import { ProfilePreview } from '@/components/banner-preview'
 import { BannerOptions, type FieldErrors } from '@/components/banner-options'
+import { Button } from '@/components/ui/button'
 import { preventDefault } from '@/utils/common/prevent-default'
 
 function readBlobAsDataUrl(blob: Blob, signal?: AbortSignal) {
@@ -50,6 +52,7 @@ export default function Page() {
   const [spaceHeight, setSpaceHeight] = useReducer((_, v) => v ?? 0, 32)
   const [selectedIcon, setSelectedIcon] = useState<PathType | File | null>('basicSmile')
 
+  const [panelOpen, setPanelOpen] = useState(true)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [error, setError] = useState('')
 
@@ -60,6 +63,8 @@ export default function Page() {
     : selectedIcon instanceof File
       ? generateImageSvg(iconFileUrl!, spaceHeight, spaceHeight)
       : paths[selectedIcon].content
+
+  const togglePanel = useCallback(() => setPanelOpen((panelOpen) => !panelOpen), [])
 
   const handleFileList = useCallback((fileList: ArrayLike<File>) => {
     const files = Array.from(fileList)
@@ -114,27 +119,41 @@ export default function Page() {
   }, [handleFileList])
 
   return (
-    <main className='flex h-dvh overflow-hidden'>
-      <div className='w-xs shrink-0 overflow-auto border-r bg-background p-8'>
-        <h1 className='mb-6 text-xl font-semibold'>스마일 배너 생성기</h1>
-        <BannerOptions
-          backgroundColor={backgroundColor}
-          spaceHeight={spaceHeight}
-          selectedIcon={selectedIcon}
-          onBackgroundColorChange={setBackgroundColor}
-          onSpaceHeightChange={setSpaceHeight}
-          onIconSelect={setSelectedIcon}
-          onFileSelect={handleFileList}
-          onGenerate={downloadIcon}
-          fieldErrors={fieldErrors}
-          error={error}
-        />
+    <main className='relative flex h-dvh overflow-hidden'>
+      <div
+        data-hidden={!panelOpen}
+        className='relative z-10 transition-[width] duration-200 ease-out w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
+      >
+        <div className='relative w-79.75 p-8'>
+          <h1 className='mb-6 text-xl font-semibold'>스마일 배너 생성기</h1>
+          <BannerOptions
+            backgroundColor={backgroundColor}
+            spaceHeight={spaceHeight}
+            selectedIcon={selectedIcon}
+            onBackgroundColorChange={setBackgroundColor}
+            onSpaceHeightChange={setSpaceHeight}
+            onIconSelect={setSelectedIcon}
+            onFileSelect={handleFileList}
+            onGenerate={downloadIcon}
+            fieldErrors={fieldErrors}
+            error={error}
+          />
+        </div>
       </div>
-      <div className='flex flex-1 items-center justify-center overflow-hidden'>
-        <div className='box-content w-full max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
+      <div className='relative flex flex-1 h-full items-center justify-center overflow-hidden'>
+        <Button
+          variant='ghost'
+          size='icon'
+          data-hidden={panelOpen}
+          onClick={togglePanel}
+          className='absolute left-2 top-2'
+        >
+          <PanelLeft />
+        </Button>
+        <div className='box-content w-full *:min-w-xl max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
           <ProfilePreview
             bgUrl={fileUrl}
-            backgroundColor={backgroundColor}
+              backgroundColor={backgroundColor}
             spaceHeight={spaceHeight}
             selectedIconHtml={selectedIconHtml}
           />
