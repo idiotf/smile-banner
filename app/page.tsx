@@ -120,7 +120,7 @@ export default function Page() {
     <main className='flex h-dvh overflow-hidden'>
       <div
         data-hidden={!panelOpen}
-        className='relative transition w-xs data-[hidden]:w-0 shrink-0 overflow-auto border-r bg-background p-8'
+        className='relative transition w-xs data-hidden:w-0 shrink-0 overflow-auto border-r bg-background p-8'
       >
         <Button
           variant='ghost'
@@ -150,7 +150,7 @@ export default function Page() {
           size='icon'
           data-hidden={panelOpen}
           onClick={() => setPanelOpen(true)}
-          className='absolute left-2 top-2 transition-opacity data-[hidden]:opacity-0'
+          className='absolute left-2 top-2 transition-opacity data-hidden:opacity-0'
         >
           <PanelLeftOpen />
         </Button>
