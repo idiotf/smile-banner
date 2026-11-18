@@ -120,29 +120,31 @@ export default function Page() {
     <main className='flex h-dvh overflow-hidden'>
       <div
         data-hidden={!panelOpen}
-        className='relative transition-[width] w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto border-r bg-background p-8'
+        className='relative transition-[width] w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
       >
-        <Button
-          variant='ghost'
-          size='icon'
-          onClick={() => setPanelOpen(false)}
-          className='absolute right-2 top-2'
-        >
-          <PanelLeftClose />
-        </Button>
-        <h1 className='mb-6 text-xl font-semibold'>스마일 배너 생성기</h1>
-        <BannerOptions
-          backgroundColor={backgroundColor}
-          spaceHeight={spaceHeight}
-          selectedIcon={selectedIcon}
-          onBackgroundColorChange={setBackgroundColor}
-          onSpaceHeightChange={setSpaceHeight}
-          onIconSelect={setSelectedIcon}
-          onFileSelect={handleFileList}
-          onGenerate={downloadIcon}
-          fieldErrors={fieldErrors}
-          error={error}
-        />
+        <div className='w-79.75'>
+          <Button
+            variant='ghost'
+            size='icon'
+            onClick={() => setPanelOpen(false)}
+            className='absolute right-2 top-2'
+          >
+            <PanelLeftClose />
+          </Button>
+          <h1 className='mb-6 text-xl font-semibold'>스마일 배너 생성기</h1>
+          <BannerOptions
+            backgroundColor={backgroundColor}
+            spaceHeight={spaceHeight}
+            selectedIcon={selectedIcon}
+            onBackgroundColorChange={setBackgroundColor}
+            onSpaceHeightChange={setSpaceHeight}
+            onIconSelect={setSelectedIcon}
+            onFileSelect={handleFileList}
+            onGenerate={downloadIcon}
+            fieldErrors={fieldErrors}
+            error={error}
+          />
+        </div>
       </div>
       <div className='relative flex-1'>
         <Button
