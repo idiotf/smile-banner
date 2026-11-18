@@ -131,7 +131,7 @@ export default function Page() {
         />
       </div>
       <div className='flex flex-1 items-center justify-center overflow-hidden'>
-        <div className='box-content w-full min-w-xl max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
+        <div className='box-content w-full *:min-w-xl max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
           <ProfilePreview
             bgUrl={fileUrl}
             backgroundColor={backgroundColor}
