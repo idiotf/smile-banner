@@ -122,7 +122,7 @@ export default function Page() {
         data-hidden={!panelOpen}
         className='relative transition-[width] w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
       >
-        <div className='w-79.75'>
+        <div className='w-79.75 p-8'>
           <Button
             variant='ghost'
             size='icon'
