@@ -52,7 +52,7 @@ export default function Page() {
   const [spaceHeight, setSpaceHeight] = useReducer((_, v) => v ?? 0, 32)
   const [selectedIcon, setSelectedIcon] = useState<PathType | File | null>('basicSmile')
 
-  const [panelOpen, setPanelOpen] = useState(false)
+  const [panelOpen, setPanelOpen] = useState(true)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [error, setError] = useState('')
 
@@ -119,13 +119,14 @@ export default function Page() {
   return (
     <main className='flex h-dvh overflow-hidden'>
       <div
-        hidden={!panelOpen}
-        className='relative w-xs shrink-0 overflow-auto border-r bg-background p-8'
+        data-hidden={!panelOpen}
+        className='relative transition w-xs [data-hidden]:w-0 shrink-0 overflow-auto border-r bg-background p-8'
       >
         <Button
           variant='ghost'
+          size='icon'
           onClick={() => setPanelOpen(false)}
-          className='absolute right-4 top-4'
+          className='absolute right-2 top-2'
         >
           <PanelLeftClose />
         </Button>
@@ -146,9 +147,10 @@ export default function Page() {
       <div className='relative flex-1'>
         <Button
           variant='ghost'
-          hidden={panelOpen}
+          size='icon'
+          data-hidden={panelOpen}
           onClick={() => setPanelOpen(true)}
-          className='absolute left-4 top-4'
+          className='absolute left-2 top-2'
         >
           <PanelLeftOpen />
         </Button>
