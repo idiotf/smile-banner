@@ -84,7 +84,7 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
         <SelectValue>
           <IconPreview
             viewBox='0 0 32 32'
-                selectedIconHtml={selectedIconInfo?.preview ?? ''}
+            selectedIconHtml={selectedIconInfo?.preview ?? ''}
             className='h-full scale-125 *:fill-foreground'
           />
           {selectedIconInfo?.label ?? '스마일 없음'}
@@ -100,7 +100,7 @@ function IconSelect({ selectedIcon, onIconSelect }: IconSelectProps) {
             <SelectItem key={value} value={`icon-${value}`}>
               <IconPreview
                 viewBox='0 0 32 32'
-                    selectedIconHtml={paths[value].preview}
+                selectedIconHtml={paths[value].preview}
                 className='size-5 h-full scale-125 *:fill-foreground'
               />
               {label}
