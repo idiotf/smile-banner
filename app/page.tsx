@@ -117,10 +117,10 @@ export default function Page() {
   }, [handleFileList])
 
   return (
-    <main className='flex h-dvh overflow-hidden'>
+    <main className='relative flex h-dvh overflow-hidden'>
       <div
         data-hidden={!panelOpen}
-        className='transition-[width] transition-500 w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
+        className='relative z-10 transition-[width] transition-500 w-xs data-[hidden=true]:w-0 shrink-0 overflow-auto overflow-x-hidden border-r bg-background'
       >
         <div className='relative w-79.75 p-8'>
           <Button
@@ -146,25 +146,23 @@ export default function Page() {
           />
         </div>
       </div>
-      <div className='relative flex-1'>
+      <div className='flex flex-1 h-full items-center justify-center overflow-hidden'>
         <Button
           variant='ghost'
           size='icon'
           data-hidden={panelOpen}
           onClick={() => setPanelOpen(true)}
-          className='absolute left-2 top-2 transition-opacity transition-300 delay-300 data-[hidden=true]:delay-0 data-[hidden=true]:opacity-0'
+          className='absolute left-2 top-2 '
         >
           <PanelLeftOpen />
         </Button>
-        <div className='flex h-full items-center justify-center overflow-hidden'>
-          <div className='box-content w-full *:min-w-xl max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
-            <ProfilePreview
-              bgUrl={fileUrl}
+        <div className='box-content w-full *:min-w-xl max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
+          <ProfilePreview
+            bgUrl={fileUrl}
               backgroundColor={backgroundColor}
-              spaceHeight={spaceHeight}
-              selectedIconHtml={selectedIconHtml}
-            />
-          </div>
+            spaceHeight={spaceHeight}
+            selectedIconHtml={selectedIconHtml}
+          />
         </div>
       </div>
     </main>
