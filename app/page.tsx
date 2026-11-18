@@ -150,7 +150,7 @@ export default function Page() {
         >
           <PanelLeft />
         </Button>
-        <div className='box-content w-full *:min-w-xl max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
+        <div className='box-content w-full *:min-w-sm max-w-7xl overflow-hidden border shadow-[0_0_48px_-24px]'>
           <ProfilePreview
             bgUrl={fileUrl}
               backgroundColor={backgroundColor}
