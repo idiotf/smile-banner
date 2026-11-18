@@ -152,7 +152,7 @@ export default function Page() {
           size='icon'
           data-hidden={panelOpen}
           onClick={() => setPanelOpen(true)}
-          className='absolute left-2 top-2 transition-opacity transition-300 data-[hidden=true]:delay-300 data-[hidden=true]:opacity-0'
+          className='absolute left-2 top-2 transition-opacity transition-300 delay-300 data-[hidden=true]:delay-0 data-[hidden=true]:opacity-0'
         >
           <PanelLeftOpen />
         </Button>
